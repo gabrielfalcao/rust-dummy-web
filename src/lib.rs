@@ -6,7 +6,7 @@ pub mod http {
     #[derive(Debug)]
     pub struct Request<'a> {
         pub method: &'a str,
-        pub     path: &'a str,
+        pub path: &'a str,
     }
     impl Request<'static> {
         pub fn from_buffer(buffer: &[u8]) -> Option<Request> {
@@ -17,9 +17,9 @@ pub mod http {
                     let method = cap.get(1).unwrap().as_str();
                     let path = cap.get(2).unwrap().as_str();
                     Some(Request { method, path })
-                },
-                None => None
-            }
+                }
+                None => None,
+            };
         }
     }
 }
