@@ -1,5 +1,7 @@
 # Dummy Web Server in Rust
 
+![Continuous Integration](https://github.com/gabrielfalcao/rust-dummy-web/actions/workflows/rust.yaml/badge.svg)
+
 > Tested in Rust v1.56
 
 Teaching myself rust by writting a small HTTP server.
