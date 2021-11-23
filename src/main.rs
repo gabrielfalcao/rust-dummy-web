@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
 use rust_embed::RustEmbed;
+use web_server::http::Request;
 
 #[derive(RustEmbed)]
 #[folder = "public/"]
@@ -21,31 +22,47 @@ fn main() {
 }
 
 
-fn load_html(filename: &str) -> String {
-    let file = Asset::get(filename).expect(format!("file not found: {}", filename).as_str());
-    let result = std::str::from_utf8(file.data.as_ref()).expect("failed to load index.html as utf-8");
-    return String::from(result);
+fn load_html(filename: &str) -> Option<String> {
+    let file = Asset::get(filename);
+    match file {
+        Some(file) => match std::str::from_utf8(file.data.as_ref()) {
+            Ok(value) => Some(value.to_string()),
+            Err(_) => None
+        },
+        None => None
+    }
 }
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
 
-    let  get = b"GET / HTTP/1.1\r\n";
 
-    let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK", "index.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND", "404.html")
+    let request = Request::from_buffer(&buffer).unwrap();
+    println!("Request: {:#?}", request);
+
+    let (status_line, filename) = match request.path {
+        "/" => ("HTTP/1.1 200 OK", "index.html"),
+        _ => ("HTTP/1.1 200 OK", request.path.strip_prefix("/").unwrap_or(request.path))
     };
 
-    let contents = load_html(&filename);
-    let response = format!(
-        "{}\r\nContent-Length: {}\r\n\r\n{}",
-        status_line,
-        contents.len(),
-        contents
-    );
+    let response = match load_html(&filename) {
+        Some(contents) => format!(
+            "{}\r\nContent-Length: {}\r\n\r\n{}",
+            status_line,
+            contents.len(),
+            contents
+        ),
+        None => {
+            let contents = load_html("404.html").unwrap();
+            format!(
+                    "{}\r\nContent-Length: {}\r\n\r\n{}",
+                    "HTTP/1.1 404 Not Found",
+                    contents.len(),
+                    contents
+                )
+        }
+    };
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
