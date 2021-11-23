@@ -41,6 +41,7 @@ fn handle_connection(mut stream: TcpStream) {
     let request = Request::from_buffer(&buffer).unwrap();
     println!("Request: {:#?}", request);
 
+    // hardcoded routing
     let (status_line, filename) = match request.path {
         "/" => ("HTTP/1.1 200 OK", "index.html"),
         _ => ("HTTP/1.1 200 OK", request.path.strip_prefix("/").unwrap_or(request.path))
