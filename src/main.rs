@@ -34,10 +34,10 @@ fn load_html(filename: &str) -> Option<String> {
     let file = Asset::get(filename);
     match file {
         Some(file) => {
-            match std::str::from_utf8(file.data.as_ref()) {
-                Ok(value) => Some(value.to_string()),
-                Err(_) => None,
-            }
+            return unsafe {
+                let value = std::str::from_utf8_unchecked(file.data.as_ref());
+                Some(value.to_string())
+            };
         }
         None => None,
     }
