@@ -1,12 +1,11 @@
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
+use std::io::BufReader;
 use rust_embed::RustEmbed;
 use web_server::http::Request;
-use ansi_term::Colour::Red;
-use ansi_term::Colour::Blue;
-use ansi_term::Colour::Green;
-use ansi_term::Colour::Yellow;
+use ansi_term::Colour;
+
 
 #[derive(RustEmbed)]
 #[folder = "public/"]
@@ -19,8 +18,10 @@ fn main() {
     let listener = TcpListener::bind(address.clone()).unwrap();
     println!(
         "{} {}",
-        Yellow.bold().paint("Web Server listening on"),
-        Blue.bold().underline().paint(format!("http://{}", address))
+        Colour::Yellow.bold().paint("Web Server listening on"),
+        Colour::Blue.bold().underline().paint(
+            format!("http://{}", address),
+        )
     );
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -44,26 +45,24 @@ fn load_html(filename: &str) -> Option<String> {
 }
 
 fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
-    stream.read(&mut buffer).unwrap();
+    let mut input = BufReader::new(stream.try_clone().unwrap());
+    let mut buf = String::new();
+    input.read_line(&mut buf).unwrap();
+    let bytes = buf.as_bytes();
+    let request = Request::from_buffer(&bytes).unwrap();
 
-
-    let request = Request::from_buffer(&buffer).unwrap();
-
-    let (status_line, filename) = match request.path {
+    let path = request.path.as_str();
+    let (status_line, filename) = match path {
         "/" => ("HTTP/1.1 200 OK", "index.html"),
-        _ => (
-            "HTTP/1.1 200 OK",
-            request.path.strip_prefix("/").unwrap_or(request.path),
-        ),
+        _ => ("HTTP/1.1 200 OK", path.strip_prefix("/").unwrap_or(path)),
     };
 
     let response = match load_html(&filename) {
         Some(contents) => {
             println!(
-                "Request {} {} 200 OK",
-                Green.bold().paint(request.method),
-                Green.paint(request.path)
+                "{} {} 200 OK",
+                Colour::Green.bold().paint(request.method),
+                Colour::Green.paint(request.path)
             );
 
             format!(
@@ -75,9 +74,9 @@ fn handle_connection(mut stream: TcpStream) {
         }
         None => {
             println!(
-                "Request {} {} 404 Not Found",
-                Red.bold().paint(request.method),
-                Red.paint(request.path)
+                "{} {} 404 Not Found",
+                Colour::Red.bold().paint(request.method),
+                Colour::Red.paint(request.path)
             );
             let contents = load_html("404.html").unwrap();
             format!(
