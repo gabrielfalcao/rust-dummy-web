@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.js": "/static/js/main.11c9b667.chunk.js",
+    "main.js.map": "/static/js/main.11c9b667.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.910d5718.js",
+    "runtime-main.js.map": "/static/js/runtime-main.910d5718.js.map",
+    "static/css/2.383c0125.chunk.css": "/static/css/2.383c0125.chunk.css",
+    "static/js/2.7b854032.chunk.js": "/static/js/2.7b854032.chunk.js",
+    "static/js/2.7b854032.chunk.js.map": "/static/js/2.7b854032.chunk.js.map",
+    "static/js/3.3616189b.chunk.js": "/static/js/3.3616189b.chunk.js",
+    "static/js/3.3616189b.chunk.js.map": "/static/js/3.3616189b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.383c0125.chunk.css.map": "/static/css/2.383c0125.chunk.css.map",
+    "static/js/2.7b854032.chunk.js.LICENSE.txt": "/static/js/2.7b854032.chunk.js.LICENSE.txt",
+    "static/media/android-chrome-192x192.f571d3c1.png": "/static/media/android-chrome-192x192.f571d3c1.png",
+    "static/media/android-chrome-512x512.c96eeaec.png": "/static/media/android-chrome-512x512.c96eeaec.png",
+    "static/media/apple-touch-icon.6d588d00.png": "/static/media/apple-touch-icon.6d588d00.png",
+    "static/media/coin.c622ea0b.png": "/static/media/coin.c622ea0b.png",
+    "static/media/favicon.d702e7f8.ico": "/static/media/favicon.d702e7f8.ico",
+    "static/media/logo.6ce24c58.svg": "/static/media/logo.6ce24c58.svg",
+    "static/media/metamask.45038d58.svg": "/static/media/metamask.45038d58.svg",
+    "static/media/mstile-150x150.780de08f.png": "/static/media/mstile-150x150.780de08f.png",
+    "static/media/safari-pinned-tab.8db55f2e.svg": "/static/media/safari-pinned-tab.8db55f2e.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.910d5718.js",
+    "static/css/2.383c0125.chunk.css",
+    "static/js/2.7b854032.chunk.js",
+    "static/js/main.11c9b667.chunk.js"
+  ]
+}
