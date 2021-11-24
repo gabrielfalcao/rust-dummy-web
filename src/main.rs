@@ -20,7 +20,7 @@ fn main() {
     println!(
         "{} {}",
         Yellow.bold().paint("Web Server listening on"),
-        Blue.bold().underline().paint(address)
+        Blue.bold().underline().paint(format!("http://{}", address))
     );
     for stream in listener.incoming() {
         let stream = stream.unwrap();
